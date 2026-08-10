@@ -320,3 +320,45 @@ that pipes to claude via stdin.
 
 
 
+\---
+
+\## Exercise 4 Reflection (2026-08-10)
+
+
+
+1\. Most surprising load-bearing: Constraint 7 (output only the PRD). A formatting
+
+&#x20;  rule, but without it Sonnet returned a summary, not the PRD, and failed every
+
+&#x20;  content check.
+
+
+
+2\. Most surprising dead weight: Constraint 6 (Open Questions). Removing it changed
+
+&#x20;  nothing; both models add an Open Questions section on their own.
+
+
+
+3\. What the model gap revealed: no Haiku-only failures this run; Sonnet was the one
+
+&#x20;  that failed. Where the command and tests left a decision unstated (is there
+
+&#x20;  audio?), the two models chose differently - Sonnet left audio out, Haiku put it
+
+&#x20;  in. The gap was an unstated spec, not a capability difference.
+
+
+
+4\. Gaps closed vs accepted:
+
+&#x20;  - Closed: output format (Constraint 7); over-assuming audio check (made
+
+&#x20;    conditional) rather than hard-coding audio into the reusable command.
+
+&#x20;  - Accepted: kept Constraint 6 as a removal candidate, not deleted - one passing
+
+&#x20;    domain is not enough to remove it; retest on another product first.
+
+
+
