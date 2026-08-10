@@ -1,0 +1,32 @@
+prompts:
+  - file://prd-prompt.md
+
+defaultTest:
+  options:
+    provider: "exec: node ./claude.js"
+
+providers:
+  - id: "exec: node ./claude.js"
+    label: sonnet
+    config:
+      model: sonnet
+  - id: "exec: node ./claude.js"
+    label: haiku
+    config:
+      model: haiku
+
+tests:
+  - vars:
+      product_description: |
+        Pomodoro timer application with 25-minute work intervals, 5-minute break intervals, session tracking, and a weekly productivity heat map.
+    assert:
+      - type: llm-rubric
+        value: "The PRD specifies audio or notification behavior for BOTH transitions (work to break and break to work), makes the two signals distinguishable, and states what happens if the browser blocks audio."
+      - type: llm-rubric
+        value: "The PRD names what each completed session records (for example date, start time, end time), where that data is stored, and whether it persists across closing and reopening the app."
+      - type: llm-rubric
+        value: "The PRD states timing and accuracy requirements with a measurable numeric tolerance, and does not use vague words like accurate, precise, fast, or reliable without a measurable definition."
+      - type: llm-rubric
+        value: "The PRD contains an explicit Out of Scope or Not in V1 section that names at least three excluded capabilities."
+      - type: llm-rubric
+        value: "The PRD contains an explicit Open Questions section that surfaces genuine unknowns rather than silently assuming answers."

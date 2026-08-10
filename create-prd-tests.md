@@ -220,3 +220,39 @@ Result: 2 of 5 FAIL (TC1, TC5). Tests are working - they caught real gaps.
 
 
 
+\---
+
+\## Exercise 3 - Promptfoo two-model baseline (2026-08-10)
+
+
+
+Config: eval/create-prd-promptfoo.yaml (providers: sonnet + haiku, via claude.js)
+
+Ran isolated in eval/ so the model could not read this test file.
+
+
+
+Result:
+
+\- haiku: PASS (all 5 checks) - produced the actual PRD.
+
+\- sonnet: FAIL - returned a SUMMARY about the PRD ("I've drafted a PRD that
+
+&#x20; addresses all six constraints...") instead of the PRD itself, so the grader
+
+&#x20; saw a description, not the document.
+
+
+
+Reading: harness / output-format artifact, not a prompt-quality gap. Sonnet
+
+wrapped its answer in preamble (and likely tried to save the PRD to a file).
+
+
+
+Next change (Exercise 4): add an output-format constraint to create-prd.md -
+
+"Output only the PRD as Markdown. No preamble, commentary, or summary. Do not
+
+write files." Then re-run; both models should emit the PRD.
+
