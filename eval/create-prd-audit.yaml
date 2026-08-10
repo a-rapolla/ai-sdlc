@@ -1,0 +1,24 @@
+prompts:
+  - file://prd-prompt-audit.md
+
+defaultTest:
+  options:
+    provider: file://claude-provider.js
+
+providers:
+  - id: file://claude-provider.js
+    label: sonnet
+    config:
+      model: sonnet
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+tests:
+  - vars:
+      product_description: |
+        Pomodoro timer application with 25-minute work intervals, 5-minute break intervals, session tracking, and a weekly productivity heat map.
+    assert:
+      - type: llm-rubric
+        value: "The PRD contains an explicit Open Questions section that surfaces genuine unknowns rather than silently assuming answers."

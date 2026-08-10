@@ -3,14 +3,14 @@ prompts:
 
 defaultTest:
   options:
-    provider: "exec: node ./claude.js"
+    provider: file://claude-provider.js
 
 providers:
-  - id: "exec: node ./claude.js"
+  - id: file://claude-provider.js
     label: sonnet
     config:
       model: sonnet
-  - id: "exec: node ./claude.js"
+  - id: file://claude-provider.js
     label: haiku
     config:
       model: haiku
@@ -21,7 +21,7 @@ tests:
         Pomodoro timer application with 25-minute work intervals, 5-minute break intervals, session tracking, and a weekly productivity heat map.
     assert:
       - type: llm-rubric
-        value: "The PRD specifies audio or notification behavior for BOTH transitions (work to break and break to work), makes the two signals distinguishable, and states what happens if the browser blocks audio."
+        value: "The PRD specifies notification behavior for BOTH transitions (work to break and break to work) and makes the two signals distinguishable. If the PRD includes audio notifications, it must also state what happens when audio is blocked or unavailable; if the PRD does not include audio at all, that audio clause does not apply."
       - type: llm-rubric
         value: "The PRD names what each completed session records (for example date, start time, end time), where that data is stored, and whether it persists across closing and reopening the app."
       - type: llm-rubric

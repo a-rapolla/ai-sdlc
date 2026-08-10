@@ -256,3 +256,67 @@ Next change (Exercise 4): add an output-format constraint to create-prd.md -
 
 write files." Then re-run; both models should emit the PRD.
 
+
+
+
+
+
+
+\---
+
+\## Exercise 4 - Load-bearing + Model Ladder audit (2026-08-10)
+
+
+
+Green state: both models pass all 5 checks. sonnet 5/5, haiku 5/5. Delta = 0.
+
+
+
+How Sonnet reached green:
+
+\- Sonnet had scoped audio OUT of V1, so it could not "handle blocked audio."
+
+&#x20; The product never specified audio, so the check was over-assuming. Fix: made
+
+&#x20; check 1 conditional (handle blocked audio only IF the PRD includes audio).
+
+&#x20; A criterion fix, not a prompt fix - forcing audio into the reusable command
+
+&#x20; would break genericness.
+
+\- Added Constraint 7 (output only the PRD, no preamble or file writes) so both
+
+&#x20; models return the document itself, not a summary of it.
+
+
+
+Load-bearing audit:
+
+\- Removed Constraint 6 (Open Questions) and re-ran that check on both models.
+
+\- Result: both still PASSED. Constraint 6 is NOT load-bearing on this domain;
+
+&#x20; the models add an Open Questions section by default.
+
+\- Decision: flag as removal candidate; retest on another product before deleting.
+
+
+
+Model Ladder audit: no Haiku-only failures. Passing Haiku means well-specified.
+
+Only divergence was Sonnet's audio scoping, resolved above.
+
+
+
+Tooling note: the improving/promptfoo claude.js wrapper hits a
+
+Windows command-line length limit (spawn ENAMETOOLONG) on large outputs. Fixed
+
+by rewriting it as an in-process Promptfoo provider (eval/claude-provider.js)
+
+that pipes to claude via stdin.
+
+
+
+
+

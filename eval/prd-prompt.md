@@ -76,6 +76,12 @@ description itself, not from a fixed stack.
 
 &#x20;  description leaves unsettled, rather than silently assuming answers. <-- Test Case 5
 
+7\. Output only the finished PRD as Markdown. Do not include any preamble,
+
+&#x20;  explanation, commentary, or summary of what you did, and do not attempt to
+
+&#x20;  write files. The response body is the PRD itself.
+
 
 
 Product description:

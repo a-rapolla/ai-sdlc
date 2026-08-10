@@ -82,3 +82,6 @@ description itself, not from a fixed stack.
 
 &#x20;  write files. The response body is the PRD itself.
 
+
+Product description:
+{{product_description}}
