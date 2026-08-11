@@ -1,0 +1,29 @@
+prompts:
+  - file://prd-prompt.md
+
+defaultTest:
+  options:
+    provider: file://claude-provider.js
+
+providers:
+  - id: file://claude-provider.js
+    label: sonnet
+    config:
+      model: sonnet
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+tests:
+  - vars:
+      product_description: file://teampulse-desc.txt
+    assert:
+      - type: llm-rubric
+        value: "The PRD defines anonymity as concrete, checkable rules, not a general promise: no individual response can be attributed to a person in ANY view (including manager, admin, and direct database or raw-data views); no API route, export, filter, or admin mode returns individual responses; and it describes the mechanism that enforces this. A PRD that only asserts responses are anonymous without these enforceable properties fails."
+      - type: llm-rubric
+        value: "The PRD specifies at least two distinct roles with different access: respondents who only submit surveys, and managers who configure surveys and view aggregated results for their own team, stating what each role can and cannot do. Treating all users the same fails."
+      - type: llm-rubric
+        value: "The out-of-scope section names all four excluded items by name: ML-based sentiment analysis, cross-team comparison, HR-system integration, and native mobile apps. Omitting any of the four fails."
+      - type: llm-rubric
+        value: "The PRD addresses small-sample re-identification: it defines a minimum number of responses below which results are not shown (and what is shown instead), and states how a team too small to reach that threshold is handled. Showing aggregates regardless of response count fails."

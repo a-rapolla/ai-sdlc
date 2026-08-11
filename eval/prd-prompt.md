@@ -36,7 +36,7 @@ specific, unambiguous information that the team can implement it without chasing
 
 missing details. The right technical assumptions come from the product
 
-description itself, not from a fixed stack.
+description itself, not from a fixed stack. When a product makes a hard guarantee such as privacy, anonymity, security, or safety, a developer-ready PRD specifies how that guarantee is enforced at every layer and for every actor, including privileged ones such as administrators and direct database access, and it addresses the edge cases where the guarantee could break by specifying a safe protective default for each such edge case rather than deferring it; the exact parameter (such as a specific threshold value) may be left as an open question, but the guarantee must never be left unprotected while that decision is pending.
 
 
 
@@ -81,8 +81,7 @@ description itself, not from a fixed stack.
 &#x20;  explanation, commentary, or summary of what you did, and do not attempt to
 
 &#x20;  write files. The response body is the PRD itself.
-
-
+8. When the product presents data aggregated from individuals under a privacy or anonymity guarantee, specify a minimum group or sample size below which results are suppressed (and what is shown instead), and how groups too small to ever meet it are handled. The exact minimum may be an open question, but a protective default must be specified.
 
 Product description:
 {{product_description}}

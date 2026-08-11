@@ -488,5 +488,85 @@ Failure Criteria (must NOT occur):
 
 
 
+\---
+
+\## Exercise 5 - TeamPulse generalization (2026-08-11)
+
+
+
+Tested create-prd against TeamPulse (enterprise: anonymity guarantee, two roles,
+
+SSO, scheduled surveys). Wrote 4 TeamPulse test cases (6-9), committed before any
+
+command change.
+
+
+
+Iteration record (TeamPulse, sonnet + haiku):
+
+\- Baseline: haiku 4/4, sonnet 2/4 (failed anonymity-any-view and small-team).
+
+\- Iter 1, Context added (hard guarantees enforced at every layer and actor,
+
+&#x20; including admins and direct DB; edge cases addressed): sonnet 3/4;
+
+&#x20; anonymity-any-view now passes. LOAD-BEARING (its addition fixed that check).
+
+\- Iter 2, Context strengthened (guarantee edge cases get a safe default, not
+
+&#x20; deferral): sonnet 3/4, no change. NOT clearly load-bearing; Constraint 8 did
+
+&#x20; the work. Removal candidate; retest on another product before deleting.
+
+\- Iter 3, Constraint 8 added (privacy/anonymity aggregates must define a
+
+&#x20; minimum-sample suppression threshold and handle too-small groups): small-team
+
+&#x20; PASSES. LOAD-BEARING. A different anonymity vector then failed on sonnet
+
+&#x20; (timestamp correlation at the admin/DB layer).
+
+
+
+Model Ladder checkpoint:
+
+\- haiku (the bar) 4/4 every run: command well-specified by the program standard.
+
+\- sonnet varies run to run: each generation leaves a different anonymity hole
+
+&#x20; (missing suppression, then open timestamp correlation). Anonymity is a
+
+&#x20; multi-vector guarantee; closing every vector on sonnet would need a
+
+&#x20; TeamPulse-specific anonymity checklist = overfitting.
+
+\- Gap accepted (sonnet-only variance on the anonymity checks). Reasoning: rubric
+
+&#x20; clear, output producible (haiku and the Step 1 run produce airtight anonymity),
+
+&#x20; iterations exhausted without overfitting or re-rolling. Matches the exercise
+
+&#x20; escape (clear rubric, producible output).
+
+
+
+Regression check (updated command vs Pomodoro, Module 1 tests):
+
+\- sonnet 5/5, haiku 5/5. NO regression. Additions are conditional and did not fire
+
+&#x20; on Pomodoro, confirming they stayed generic.
+
+
+
+Net: command generalized to a different enterprise product, improved its two
+
+weakest TeamPulse checks, did not break Pomodoro. Kept: Context guarantee-
+
+enforcement, Constraint 8 suppression. Flag for removal test: iter-2 safe-default
+
+sentence.
+
+
+
 
 
