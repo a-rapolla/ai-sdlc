@@ -362,3 +362,131 @@ that pipes to claude via stdin.
 
 
 
+
+
+
+
+\---
+
+\## TeamPulse Test Cases (Exercise 5, written before any command change)
+
+
+
+\## Test Case 6: Anonymity is defined as checkable rules, not a promise
+
+
+
+Input: the TeamPulse product description.
+
+
+
+Expected Output Criteria:
+
+\- The PRD defines anonymity as concrete, checkable rules, not a general promise.
+
+&#x20; It states that no individual response can be attributed to a person in ANY view,
+
+&#x20; including manager, admin, and direct database or raw-data views; that no API
+
+&#x20; route, export, filter, or admin mode returns individual responses; and it
+
+&#x20; describes the mechanism that enforces this (for example, separating identity
+
+&#x20; from response so the two cannot be joined).
+
+
+
+Failure Criteria (must NOT occur):
+
+\- Uses "anonymous" as a general assurance without naming these enforceable
+
+&#x20; properties, or leaves any view (admin or database) able to attribute a response.
+
+
+
+\## Test Case 7: Distinct user roles are specified
+
+
+
+Input: the TeamPulse product description.
+
+
+
+Expected Output Criteria:
+
+\- The PRD specifies at least two distinct roles with different access and
+
+&#x20; requirements: respondents, who only submit surveys, and managers, who configure
+
+&#x20; surveys and view aggregated results for their own team. It states what each role
+
+&#x20; can and cannot do.
+
+
+
+Failure Criteria (must NOT occur):
+
+\- Treats the system as having one kind of user, gives respondents and managers the
+
+&#x20; same access, or omits the submit-only versus configure-and-view distinction.
+
+
+
+\## Test Case 8: Named out-of-scope items all appear
+
+
+
+Input: the TeamPulse product description.
+
+
+
+Expected Output Criteria:
+
+\- The out-of-scope section names, by name, all four items the description excludes:
+
+&#x20; ML-based sentiment analysis, cross-team comparison, HR-system integration, and
+
+&#x20; native mobile apps.
+
+
+
+Failure Criteria (must NOT occur):
+
+\- Omits any of those four named items, or lists out-of-scope items only generically
+
+&#x20; without naming these four.
+
+
+
+\## Test Case 9: Small-team re-identification is addressed
+
+
+
+Input: the TeamPulse product description.
+
+
+
+Expected Output Criteria:
+
+\- The PRD addresses the small-sample re-identification risk: it defines a minimum
+
+&#x20; number of responses below which results are not shown (and what is shown
+
+&#x20; instead), and states how the system handles a team too small to ever reach that
+
+&#x20; threshold.
+
+
+
+Failure Criteria (must NOT occur):
+
+\- Shows aggregate results regardless of how few people responded, or does not
+
+&#x20; address teams too small to preserve anonymity.
+
+
+
+
+
+
+
