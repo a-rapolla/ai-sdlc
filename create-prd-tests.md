@@ -309,3 +309,42 @@ manual safeguard did not travel into the tool that replaced the manual step, and
 it failed silently. Same risk now applies to eval/arch-prompt.md, which is a copy
 of create-architecture.md kept in sync by a rule that currently lives in a comment
 rather than in a script.
+
+
+---
+## PRD Command Progression (Exercise 5 Step 6, backfilled 2026-08-12)
+
+BACKFILL NOTE: Exercise 5 Step 6 asked for both outputs to be saved and neither
+was, which is why Exercise 6 had to regenerate its architecture input. The two
+outputs below were generated today, not during Exercise 5. The SCORES are the ones
+Exercise 5 recorded at the time; they have not been re-measured, because the
+harness changed since (isolation fix) and a re-run would be a different
+measurement, not the original one.
+
+Both PRDs were generated identically - haiku, isolated empty directory, the same
+eval/teampulse-desc.txt - so they differ only in which version of create-prd.md
+produced them.
+
+- eval/teampulse-prd-module1.md - the Module 1 command (git a43e4c9: 7 constraints,
+  no Constraint 8, no guarantee-enforcement Context), run against TeamPulse.
+- eval/teampulse-prd.md - the current Module 2 command (Constraints 1-8), run
+  against TeamPulse.
+
+Module 1 command (Pomodoro-tuned) against TeamPulse:
+  Sonnet score: 2/4 (recorded in the Exercise 5 iteration record)
+  Haiku score:  4/4
+  Key failures: anonymity-in-any-view, and small-sample re-identification.
+
+Module 2 command (TeamPulse-tuned) against TeamPulse:
+  Sonnet score: 3/4
+  Haiku score:  4/4
+  Most significant improvement: small-sample suppression. Text comparison of the
+  two saved outputs shows the Module 1 PRD contains ZERO references to a minimum
+  response count, suppression, or k-anonymity; the current PRD contains 7. The
+  Module 1 output is also the LONGER document (28 KB vs 23 KB) - the same
+  volume-is-not-quality pattern found in Exercise 6's upstream check, where the
+  weaker command produced the bigger and thinner document.
+
+Remaining Sonnet gap (1/4) is the accepted anonymity variance documented in the
+Exercise 5 entry: each generation leaves a different anonymity vector open, and
+closing every vector would require a TeamPulse-specific checklist.
