@@ -1,0 +1,43 @@
+description: >
+  Load-bearing audit (Exercise 7, Step 3). Same command with ONE instruction
+  removed - the Context paragraph stating that a measurable experience requirement
+  from the PRD is a design constraint whose satisfaction must be shown - re-checking
+  only the criterion it targets, TC3.
+
+prompts:
+  - file://ux-prompt-audit.md
+
+providers:
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+defaultTest:
+  options:
+    provider:
+      id: file://claude-provider.js
+      config:
+        model: haiku
+
+tests:
+  - description: AUDIT - TeamPulse UX, requirement-engineering Context removed
+    vars:
+      prd: file://teampulse-prd.md
+    assert:
+      - type: llm-rubric
+        value: >
+          The PRD states that the survey form is mobile-accessible and completable in
+          under three minutes. The specification must show that the design serves that
+          requirement: it names the design decisions that make it achievable and shows
+          the reasoning - how content is divided across screens or steps, what is left
+          out to fit, how input effort is minimised - and states how the requirement
+          could be checked after implementation. Device and context constraints must
+          appear as design decisions (target sizes, reach, input method, behaviour on
+          a slow or interrupted connection), not only as a breakpoint list. It FAILS
+          if the requirement is satisfied by DISPLAYING it to the user - on-screen
+          copy such as "Estimated time: 3 minutes", or an annotation on a flow diagram
+          - while no design decision is traceable to it; if it is restated in a goals
+          or requirements section and never mentioned again; or if responsiveness is
+          addressed only as breakpoints with nothing said about the actual conditions
+          of use.

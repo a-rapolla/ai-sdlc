@@ -1,0 +1,93 @@
+description: create-ux scorecard (Exercise 7). Haiku is the sole provider.
+
+prompts:
+  - file://ux-prompt.md
+
+providers:
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+defaultTest:
+  options:
+    provider:
+      id: file://claude-provider.js
+      config:
+        model: haiku
+
+tests:
+  # TC5 (distinct modes) is deliberately NOT asserted here: the TeamPulse product
+  # has no modes, so the criterion is untestable on this input. It is checked at
+  # the Tic-Tac-Toe kata in Step 5.
+  - description: TeamPulse UX (manager + engineer, mobile survey, trend dashboard)
+    vars:
+      prd: file://teampulse-prd.md
+    assert:
+      # TC1 - required elements (GUARD)
+      - type: llm-rubric
+        value: >
+          The UX specification contains all four of: (a) a component inventory - the
+          UI elements that exist, named, with what each contains and does; (b)
+          interaction flows showing how a user moves through a task from entry to
+          completion; (c) state handling for states other than the happy path, at
+          minimum empty/no-data, loading, and error states, each saying what the user
+          actually sees; (d) accessibility provisions naming specific requirements
+          (a standard, keyboard behaviour, screen reader affordances) rather than a
+          general commitment. It FAILS if any of the four is missing, if a section
+          exists in name only (an accessibility section that says the interface "will
+          be accessible" without naming anything specific, or a component list with no
+          description of what each component does), or if non-happy-path states are
+          mentioned as a category ("handle error states") without saying what is shown.
+
+      # TC2 - distinct audiences get distinct specifications (DRIVER, Context test)
+      - type: llm-rubric
+        value: >
+          The PRD describes two kinds of user: engineers, who only receive and submit
+          surveys, and managers, who configure surveys and view aggregated results.
+          The specification must treat each as a separate design problem - what each
+          sees, what each can do, and how their circumstances differ (device,
+          frequency of use, time available, familiarity with the system, technical
+          sophistication) - and give each audience interface detail proportionate to
+          what that audience actually does. Where a design decision follows from an
+          audience's circumstances, the specification says so. It FAILS if the
+          document treats the system as having one undifferentiated user; if one
+          audience appears only as a single happy-path flow while every screen,
+          component, and state is written for the other; or if the two audiences'
+          differing circumstances are never named, so that the document could be read
+          without learning that the groups differ in any respect other than
+          permissions.
+
+      # TC3 - a stated experience requirement is engineered, not announced (DRIVER)
+      - type: llm-rubric
+        value: >
+          The PRD states that the survey form is mobile-accessible and completable in
+          under three minutes. The specification must show that the design serves that
+          requirement: it names the design decisions that make it achievable and shows
+          the reasoning - how content is divided across screens or steps, what is left
+          out to fit, how input effort is minimised - and states how the requirement
+          could be checked after implementation. Device and context constraints must
+          appear as design decisions (target sizes, reach, input method, behaviour on
+          a slow or interrupted connection), not only as a breakpoint list. It FAILS
+          if the requirement is satisfied by DISPLAYING it to the user - on-screen
+          copy such as "Estimated time: 3 minutes", or an annotation on a flow diagram
+          - while no design decision is traceable to it; if it is restated in a goals
+          or requirements section and never mentioned again; or if responsiveness is
+          addressed only as breakpoints with nothing said about the actual conditions
+          of use.
+
+      # TC4 - implementable without follow-up questions (GUARD)
+      - type: llm-rubric
+        value: >
+          Components are specified concretely enough to build: what is on the screen,
+          in what arrangement, what the user can operate, what each control does, and
+          the exact user-visible text for states and messages where wording matters.
+          Behaviour is specified as well as appearance - what happens on submit, on
+          failure, on a repeat visit, on an action that cannot be completed. Where a
+          value affects implementation (a limit, a timing, a size), it is given rather
+          than left to the developer's judgement. It FAILS if it contains descriptions
+          that cannot be implemented without a follow-up question ("a clean, modern
+          dashboard", "an intuitive survey form", "clear feedback on submission"), if
+          controls are named without their behaviour or messages referred to without
+          their text, or if it describes what the interface should feel like rather
+          than what it contains and does.
