@@ -1,0 +1,161 @@
+description: create-architecture scorecard (Exercise 6). Generator = haiku only.
+
+prompts:
+  - file://arch-prompt.md
+
+# The GENERATOR is haiku: passing haiku is the program's definition of
+# well-specified (Exercise 6 onward).
+providers:
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+# Haiku is the sole provider for this config, generator and grader alike
+# (Exercise 6: "Configure create-architecture-promptfoo.yaml with Haiku as the
+# sole provider").
+defaultTest:
+  options:
+    provider:
+      id: file://claude-provider.js
+      config:
+        model: haiku
+
+tests:
+  # ---------------------------------------------------------------- ROW 1
+  # TeamPulse as specified: React / Node.js / PostgreSQL / Entra ID (OIDC).
+  - description: TeamPulse (React / Node / PostgreSQL / Entra ID)
+    vars:
+      prd: file://teampulse-prd.md
+    assert:
+      # TC1 - required sections (GUARD)
+      - type: llm-rubric
+        value: >
+          The architecture document contains all six of: (a) a component or system view
+          that names each major component, its responsibility, and how components
+          communicate; (b) a data model naming concrete entities and their key fields;
+          (c) an interface or API surface listing concrete operations (method and path,
+          or the equivalent for a non-HTTP system); (d) an authentication and
+          authorization approach, or an explicit statement that the system has no
+          authenticated actors and why; (e) deployment and runtime considerations;
+          (f) technical decisions that remain open. A document missing any of the six
+          fails. A section that exists in name only, with no content specific to this
+          system (for example "Data Model: a standard relational schema" naming no
+          entities), does not count as present.
+
+      # TC2 - guarantee holds across the whole data model (DRIVER, Context test)
+      - type: llm-rubric
+        value: >
+          The PRD guarantees that no individual response can be attributed to a person
+          in any view, including admin and direct database views. The architecture must
+          show that this guarantee holds across the WHOLE data model, not table by
+          table. It names which stores hold identifying data and which hold guarded
+          response data, and shows that no join, foreign key, token record, delivery or
+          notification log, cache, or lookup path can link an identifying record to an
+          individual response; where such a path would otherwise exist it names the
+          specific design decision that severs it. It FAILS if any of the following is
+          true: the document asserts anonymity while its own schema contains a path
+          from an identifier to an individual response through any intermediate table
+          (for example a notification or delivery log storing a recipient identifier
+          alongside a token that is itself linked to a submitted response); or it
+          reasons only per-table ("the responses table has no user_id") and leaves
+          intermediate tables such as delivery logs, token tables, or roster snapshots
+          unexamined; or a raw external identifier (Slack user ID, email address,
+          employee ID) is stored in any record joinable to responses; or a timestamp
+          deliberately coarsened in one table is available at full precision in another.
+
+      # TC3 - technology beyond the PRD is proposed, not smuggled (DRIVER)
+      - type: llm-rubric
+        value: >
+          The PRD specifies only React, Node.js, PostgreSQL, GitHub, Jira, and Entra ID
+          (OIDC). Every other technology, service, or infrastructure component in the
+          architecture is explicitly marked as the architect's proposal that the PRD
+          does not specify, with a rationale and at least one alternative or the
+          condition under which it would not be needed. This applies to cost-bearing
+          additions: a cache, a queue or message broker, a container orchestrator, a
+          third-party email or messaging service, or a named cloud vendor. It FAILS if
+          any such component (for example Redis, SQS, Kubernetes, or a specific cloud
+          vendor's managed services) is presented as settled fact in the core
+          architecture with nothing indicating it was a choice, or is introduced only
+          inside a diagram, code sample, or environment variable list and never named
+          as a decision.
+
+      # TC4 - unresolved technical decisions stay unresolved (DRIVER)
+      - type: llm-rubric
+        value: >
+          The document contains a section of open technical decisions that lists
+          decisions the PRD does not settle and the architecture cannot settle on its
+          own authority, and each item names the decision, the realistic options, and
+          what it affects. Where the architecture picks a working value so that
+          implementation is not blocked (a data retention period, a minimum-responses
+          suppression threshold, a session timeout), that value is marked as
+          provisional AND the decision is also listed as open. It FAILS if: there is no
+          such section; or the section lists only decisions the document has already
+          made, such as an appendix of "open questions addressed in the architecture";
+          or the items are placeholders like "TBD" or "to be decided by the team"
+          without naming the decision, its options, and its impact; or a value the PRD
+          explicitly left open is fixed silently in the design with no indication that
+          it was a choice.
+
+      # TC5 - expressed in the stack the PRD names (GUARD here, DRIVER in row 2)
+      - type: llm-rubric
+        value: >
+          The architecture is expressed in the specific stack the PRD names, not in
+          placeholders: PostgreSQL described in relational terms with table
+          definitions, types, keys, and indexes; the backend in Node.js terms with
+          concrete routes or framework constructs; the frontend in React terms with
+          component structure and state handling; and authentication in Entra ID /
+          OIDC terms including the actual flow and how identity and role information
+          reach the application. It FAILS if it uses placeholder wording such as "a
+          relational database", "a modern SPA framework", or "an identity provider"
+          where the PRD named a specific technology, or if it contains artifacts from a
+          stack the PRD did not name.
+
+  # ---------------------------------------------------------------- ROW 2
+  # Same product, different stack. This is the Context load-bearing probe: if the
+  # two rows produce interchangeable documents, Context is not doing work.
+  - description: TeamPulse stack swap (HTMX / FastAPI / MongoDB / Auth0)
+    vars:
+      prd: file://teampulse-prd-python.md
+    assert:
+      # TC5 - stack fidelity, second stack (DRIVER)
+      - type: llm-rubric
+        value: >
+          The architecture is expressed in the stack this PRD names - HTMX, Python
+          FastAPI, MongoDB, and Auth0 - in that stack's own terms: MongoDB collections
+          with document shapes and index specifications; FastAPI routers with
+          request/response models and dependencies; server-rendered HTML fragments with
+          swap targets rather than a client-side component tree; and Auth0 OAuth 2.0 /
+          OIDC. It FAILS if it contains artifacts belonging to a stack this PRD did not
+          name - SQL DDL or CREATE TABLE statements, a relational schema with foreign
+          key constraints, React components or hooks, or Express/Node middleware - or
+          if it uses placeholder wording such as "a database" or "an identity provider"
+          where the PRD named a specific technology.
+
+      # TC2 - the guarantee must survive a change of data model (DRIVER)
+      - type: llm-rubric
+        value: >
+          The PRD guarantees that no individual response can be attributed to a person
+          in any view, including admin and direct database views. The architecture must
+          show that this guarantee holds across the whole data model, not collection by
+          collection: it names which stores hold identifying data and which hold
+          guarded response data, and shows that no reference, embedded identifier,
+          token record, delivery or notification log, or lookup path can link an
+          identifying record to an individual response; where such a path would
+          otherwise exist it names the design decision that severs it. It FAILS if the
+          document asserts anonymity while its own data model contains such a path, or
+          if it reasons only about the responses collection and leaves delivery logs,
+          token records, or roster snapshots unexamined, or if a raw external
+          identifier is stored in any record that can be linked to a response.
+
+      # TC4 - unresolved technical decisions stay unresolved (DRIVER)
+      - type: llm-rubric
+        value: >
+          The document contains a section of open technical decisions that the PRD does
+          not settle, each naming the decision, the realistic options, and what it
+          affects, and any working value the architecture picks (retention period,
+          minimum-responses threshold, session timeout) is marked as provisional and
+          also listed as open. It FAILS if there is no such section, if it lists only
+          decisions the document has already made, if the items are bare placeholders
+          like "TBD", or if a value the PRD left open is fixed silently with no
+          indication that it was a choice.

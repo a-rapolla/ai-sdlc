@@ -1,0 +1,64 @@
+description: >
+  Load-bearing audit (Exercise 6, Step 3). Same command with ONE instruction
+  removed - the Context paragraph stating that a hard guarantee is a property of
+  the whole system - re-checking only the criterion it targets, TC2.
+
+prompts:
+  - file://arch-prompt-audit.md
+
+providers:
+  - id: file://claude-provider.js
+    label: haiku
+    config:
+      model: haiku
+
+defaultTest:
+  options:
+    provider:
+      id: file://claude-provider.js
+      config:
+        model: haiku
+
+tests:
+  - description: AUDIT row 1 - TeamPulse (React / Node / PostgreSQL / Entra ID)
+    vars:
+      prd: file://teampulse-prd.md
+    assert:
+      - type: llm-rubric
+        value: >
+          The PRD guarantees that no individual response can be attributed to a person
+          in any view, including admin and direct database views. The architecture must
+          show that this guarantee holds across the WHOLE data model, not table by
+          table. It names which stores hold identifying data and which hold guarded
+          response data, and shows that no join, foreign key, token record, delivery or
+          notification log, cache, or lookup path can link an identifying record to an
+          individual response; where such a path would otherwise exist it names the
+          specific design decision that severs it. It FAILS if any of the following is
+          true: the document asserts anonymity while its own schema contains a path
+          from an identifier to an individual response through any intermediate table
+          (for example a notification or delivery log storing a recipient identifier
+          alongside a token that is itself linked to a submitted response); or it
+          reasons only per-table ("the responses table has no user_id") and leaves
+          intermediate tables such as delivery logs, token tables, or roster snapshots
+          unexamined; or a raw external identifier (Slack user ID, email address,
+          employee ID) is stored in any record joinable to responses; or a timestamp
+          deliberately coarsened in one table is available at full precision in another.
+
+  - description: AUDIT row 2 - TeamPulse stack swap (HTMX / FastAPI / MongoDB / Auth0)
+    vars:
+      prd: file://teampulse-prd-python.md
+    assert:
+      - type: llm-rubric
+        value: >
+          The PRD guarantees that no individual response can be attributed to a person
+          in any view, including admin and direct database views. The architecture must
+          show that this guarantee holds across the whole data model, not collection by
+          collection: it names which stores hold identifying data and which hold
+          guarded response data, and shows that no reference, embedded identifier,
+          token record, delivery or notification log, or lookup path can link an
+          identifying record to an individual response; where such a path would
+          otherwise exist it names the design decision that severs it. It FAILS if the
+          document asserts anonymity while its own data model contains such a path, or
+          if it reasons only about the responses collection and leaves delivery logs,
+          token records, or roster snapshots unexamined, or if a raw external
+          identifier is stored in any record that can be linked to a response.

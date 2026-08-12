@@ -1,0 +1,15 @@
+TeamPulse - Team Health Check System
+
+Build a lightweight team health check system that lets engineering managers run anonymous, recurring pulse surveys with their teams. Engineers answer 5-7 questions on a weekly or bi-weekly schedule. Results are aggregated and displayed in a trend dashboard visible only to the manager. Individual responses remain anonymous - managers see team-level patterns, not individual attributions.
+
+Key requirements:
+- Engineers receive a notification (email or Slack) with a link to a brief survey form
+- Survey form is mobile-accessible and completable in under 3 minutes
+- Managers have a dashboard showing trend lines over time for each question, with comparisons to prior periods
+- All responses are stored anonymously - no individual attribution in any view, including admin views
+- Managers can configure the question set, the frequency (weekly or bi-weekly), and team membership
+- The system supports multiple managers with separate teams; no cross-team visibility
+
+Technical context: HTMX server-rendered frontend, Python FastAPI backend, MongoDB database. GitLab for version control, Linear for issue tracking. Authentication via Auth0 (OAuth 2.0 / OIDC).
+
+Out of scope for V1: ML-based sentiment analysis, comparison across teams, integration with HR systems, and native mobile apps.

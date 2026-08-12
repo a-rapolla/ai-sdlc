@@ -1,0 +1,22 @@
+Kata B1: Conway's Game of Life Sandbox
+
+Difficulty: Beginner
+Primary challenge areas: State (high), Algorithm (medium), Visualization (medium), UI (medium)
+
+Challenge
+
+Implement Conway's Game of Life with a resizable grid, play/pause/step controls, adjustable simulation speed, and a pattern library containing at least the following patterns: glider, blinker, pulsar, and glider gun. Include a generation counter and live cell count. Allow users to draw cells by clicking or dragging on the grid, and support save/load of patterns.
+
+Key Technical Challenges
+
+- Efficient neighbor counting at scale (a 100x100 grid with 10,000 cells updated every frame is a performance problem)
+- Boundary conditions (does the grid wrap, or do cells die at the edge?)
+- Pattern storage format (how do you represent a pattern in a way that can be loaded and saved reliably?)
+- Performant rendering (avoid re-rendering every cell on every tick - only the changed cells)
+
+Stretch Goals
+
+- Alternative rulesets (HighLife, Day and Night, Seeds) with a visual rule editor
+- Pattern detection for stable states or cycles, with a notification when the grid reaches a stable state
+- Trail mode showing cell age with a color gradient (younger cells brighter, older cells fading)
+- RLE pattern import/export for compatibility with external pattern libraries
