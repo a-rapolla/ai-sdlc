@@ -1,0 +1,51 @@
+prompts:
+  - file://create-prd-v2.md
+
+defaultTest:
+  options:
+    provider: file://claude-provider.js
+
+providers:
+  - id: file://claude-provider.js
+    label: sonnet
+    config: { model: sonnet }
+  - id: file://claude-provider.js
+    label: haiku
+    config: { model: haiku }
+
+tests:
+  - vars:
+      product_description: |
+        TeamPulse — Team Health Check System
+
+        System Request: Build a lightweight team health check system that allows
+        engineering managers to run anonymous, recurring pulse surveys with their
+        teams. Engineers answer 5–7 questions on a weekly or bi-weekly schedule.
+        Results are aggregated and displayed in a trend dashboard visible only to
+        the manager. Individual responses remain anonymous — managers see
+        team-level patterns, not individual attributions.
+
+        Key requirements:
+        - Engineers receive a notification (email or Slack) with a link to a brief survey form
+        - Survey form is mobile-accessible and completable in under 3 minutes
+        - Managers have a dashboard showing trend lines over time for each question, with comparisons to prior periods
+        - All responses are stored anonymously — no individual attribution in any view, including admin views
+        - Managers can configure: question set, frequency (weekly/bi-weekly), and team membership
+        - The system supports multiple managers with separate teams; no cross-team visibility
+
+        Technical context: React frontend, Node.js backend, PostgreSQL database.
+        GitHub for version control, Jira for issue tracking. Authentication via the
+        company's existing SSO system (Entra ID / OIDC).
+
+        Out of scope for V1: ML-based sentiment analysis, comparison across teams,
+        integration with HR systems, native mobile apps.
+    assert:
+      - type: llm-rubric
+        value: "The PRD defines anonymity as enforceable rules: it states that no individual response can be attributed to a person in ANY view, including manager, admin, and direct database access, and it describes the mechanism that enforces this. Using the word 'anonymous' as a general assurance without these properties fails."
+      - type: llm-rubric
+        value: "The PRD specifies at least two distinct roles: a manager who configures surveys and views only their own team's aggregated dashboard, and an engineer/respondent who can only submit answers and cannot see results. It states what each role can and cannot do."
+      - type: llm-rubric
+        value: "The out-of-scope section names all four excluded items by name: ML-based sentiment analysis, comparison across teams, integration with HR systems, and native mobile apps."
+      - type: llm-rubric
+        value: "The PRD defines a minimum number of responses below which results are not shown (and states what is shown instead), and addresses how a team too small to ever reach that minimum is handled."
+    
